@@ -1,0 +1,70 @@
+{
+  "name": "big-brozzzer",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@hughsk/fulltilt": "^0.7.1",
+    "animate.css": "^4.1.1",
+    "axios": "^0.21.4",
+    "chroma-js": "^2.1.2",
+    "core-js": "^3.6.5",
+    "date-fns": "^2.25.0",
+    "filesize": "^8.0.7",
+    "gsap": "^3.7.1",
+    "gyronorm": "^2.0.6",
+    "hash.js": "^1.1.7",
+    "howler": "^2.2.3",
+    "less": "^4.1.1",
+    "less-loader": "^5.0.0",
+    "lodash": "^4.17.21",
+    "nosleep.js": "^0.12.0",
+    "ol": "^6.8.1",
+    "raw-loader": "^4.0.2",
+    "three": "^0.132.2",
+    "validator": "^13.6.0",
+    "vue": "^2.6.11",
+    "vue-marquee-text-component": "^1.2.0",
+    "vue2-google-maps": "^0.10.7",
+    "vuelayers": "^0.11.36",
+    "vuetify": "^2.4.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vue-cli-plugin-vuetify": "~2.4.2",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.7.0",
+    "webpack-cli": "^4.8.0",
+    "webpack-glsl-loader": "^1.0.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
