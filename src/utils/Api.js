@@ -9,7 +9,6 @@ export default class Api{
     }
 
     _manageResponse(response,cbSuccess,cbError){
-
         console.log(response.data);
         if(response.data){
             if(!response.data.success){
@@ -42,19 +41,19 @@ export default class Api{
         });
     }
 
-    getInstances(cb){
+    getInstances(cb,cbError){
         this._call("get/instances",{
-        },cb);
+        },cb,cbError);
     }
-    store(instance,cb){
+    store(instance,cb,cbError){
         this._call("set/store-instance",{
             instance:instance
-        },cb);
+        },cb,cbError);
     }
-    updateVersion(instance,cb){
+    updateVersion(instance,cb,cbError){
         this._call("set/update-version",{
             instance:instance
-        },cb);
+        },cb,cbError);
     }
 
 

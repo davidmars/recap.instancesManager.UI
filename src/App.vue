@@ -30,30 +30,12 @@
         </v-card>
       </v-dialog>
 
-      <v-sheet dark>
-        <v-container fluid>
-          <v-card-title>
-            Instances
-            <v-spacer></v-spacer>
-            <v-btn
-                fab class="mx-5" small
-                :loading="$db.isLoading"
-                @click="$db.refresh();">
-              <v-icon>mdi-sync</v-icon>
-            </v-btn>
-
-            <!-- search-->
-            <v-text-field
-                v-model="search"
-                rounded filled
-                clearable
-                append-icon="mdi-magnify"
-                label="Rechercher"
-                single-line
-                hide-details
-            ></v-text-field>
-          </v-card-title>
+      <v-sheet dark height="100vh">
           <v-data-table
+              class="the-table"
+              @dblclick:row="clickRow"
+              height="calc( 100vh - 80px - 75px)"
+              fixed-header
               :headers="headers"
               :items="$db.instances"
               :search="search"
@@ -63,9 +45,35 @@
               }"
               dense
           >
+
+            <template v-slot:top>
+              <div class="d-flex align-center pa-5">
+                Instances
+                <v-spacer/>
+                <!-- refresh-->
+                <v-btn
+                    fab class="mx-5" small
+                    :loading="$db.isLoading"
+                    @click="$db.refresh();">
+                  <v-icon>mdi-sync</v-icon>
+                </v-btn>
+                <!-- search-->
+                <v-text-field
+                    v-model="search"
+                    rounded filled
+                    clearable
+                    append-icon="mdi-magnify"
+                    label="Rechercher"
+                    single-line
+                    hide-details
+                ></v-text-field>
+              </div>
+            </template>
+
+
             <!--logo-->
             <template v-slot:item.hrefLogo="{ item }">
-              <v-avatar tile color="#EEEEEE" size="100" class="my-5">
+              <v-avatar tile color="#EEEEEE" size="100">
                 <v-img
                     aspect-ratio="1"
                     contain
@@ -90,20 +98,36 @@
               </template>
             </template>
 
-            <template v-slot:item.version="{ item }">
-              <v-chip x-small
-                      :color="item.version !== $db.masterVersion?'error':''">{{
-                  item.version
-                }}</v-chip>
-            </template>
-
+            <!--contact email/adresse-->
             <template v-slot:item.email="{ item }">
               {{item.email}}
               <pre class="mt-2">{{item.adresse}}</pre>
-
             </template>
 
+            <!--status-->
+            <template v-slot:item.status="{ item }">
+              <v-chip x-small
+                      :color="$utils.statusToColor(item.status)">
+                {{$utils.statusToLabel(item.status)}}</v-chip>
+            </template>
 
+            <!--payant-->
+            <template v-slot:item.payant="{ item }">
+              <v-chip x-small
+                      :color="item.payant?'success':''">
+                      {{item.payant?"payant":"gratuit"}}
+              </v-chip>
+            </template>
+
+            <!--version-->
+            <template v-slot:item.version="{ item }">
+              <v-chip x-small
+                      :color="item.version !== $db.masterVersion?'error':''">
+                      {{item.version}}
+              </v-chip>
+            </template>
+
+            <!--dir size-->
             <template v-slot:item.dirSize="{ item }">
               <div class="d-flex justify-space-between mb-2">
                 <div>Total</div>
@@ -115,15 +139,28 @@
                 <div>{{name}}</div>
                 <div>{{$utils.humanSize(value)}}</div>
               </div>
-
-
             </template>
 
-            <template v-slot:item.actions="{ item }">
-              <v-btn color="primary" light @click.prevent="details(item)">Details</v-btn>
+            <!-- & url client-->
+            <template v-slot:item.notes="{ item }">
+
+              <v-btn v-if="item.urlSuivi"
+                     class="mb-3"
+                     small rounded
+                     color="primary"
+                    :target="item.urlSuivi"
+                    :href="item.urlSuivi">
+                Suivi client
+              </v-btn>
+
+              <v-sheet
+                  v-if="item.notes"
+                  rounded color="#FFFF99" light class="pa-2">
+                <pre>{{item.notes}}</pre>
+              </v-sheet>
             </template>
+
           </v-data-table>
-        </v-container>
       </v-sheet>
 
 
@@ -162,7 +199,7 @@ export default {
           align: 'start',
           sortable: true,
           value: 'societe',
-          width: '400px'
+          width: '350px'
         },
         {
           text: 'Contact', //email adresse
@@ -196,7 +233,7 @@ export default {
           align: 'start numeric',
           sortable: true,
           value: 'warning',
-          width: '300px'
+          width: '200px'
         },
         {
           text: 'Version',
@@ -217,15 +254,15 @@ export default {
           align: 'start numeric',
           sortable: true,
           value: 'googleAnalytics',
-          zzwidth: '200px'
+          width: '200px'
         },
         {
-          text: '...',
-          value: 'actions',
+          text: 'Notes',
+          align: 'start',
           sortable: false,
-          width: '200px',
-          align: "right"
-        },
+          value: 'notes',
+          zzzwidth: '200px'
+        }
       ]
     }
   },
@@ -237,6 +274,11 @@ export default {
     }
   },
   methods:{
+    clickRow(event,line){
+      const instance=line.item;
+      this.selectedInstance=instance;
+      this.dialog=true;
+    },
     details(player){
       this.selectedInstance=player;
       this.dialog=true;
@@ -246,10 +288,33 @@ export default {
 };
 </script>
 <style lang="less">
+html{
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128,0.5);
+    border-radius: 20px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 0, 0, 0);
+
+  }
+
+}
 #app{
   .numeric{
     font-size: 11px;
     font-family: 'Roboto Mono', monospace !important;
+  }
+  .the-table{
+    td,th{
+      vertical-align: top;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
   }
 }
 </style>

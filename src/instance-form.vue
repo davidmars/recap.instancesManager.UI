@@ -1,72 +1,147 @@
 <template>
 <div>
-  <v-avatar tile color="#EEEEEE" size="200" class="my-5">
-    <v-img
-        aspect-ratio="1"
-        contain
-        :src="instance.hrefLogo"/>
-  </v-avatar>
+  <v-row>
+    <v-col cols="4">
+      <v-avatar tile color="#EEEEEE" size="300" >
+        <v-img :src="instance.hrefLogo" contain/>
+      </v-avatar>
+    </v-col>
+    <v-col cols="8">
+      <v-text-field
+          autocomplete="new-password"
+          label="Société"
+          v-model="instance.societe"
+          @input="modified=true"
+          filled
+      />
+      <v-text-field
+          autocomplete="new-password"
+          label="Email client"
+          v-model="instance.email"
+          @input="modified=true"
+          filled
+      />
+      <v-textarea
+          autocomplete="new-password"
+          filled
+          label="Adresse"
+          v-model="instance.adresse"
+          @input="modified=true"
+          rows="3"
+      />
+    </v-col>
+  </v-row>
 
-  <v-text-field
-      label="Société"
-      v-model="instance.societe"
-      @input="modified=true"
-      filled
-  />
-  <v-text-field
-      label="Email client"
-      v-model="instance.email"
-      @input="modified=true"
-      filled
-  />
-  <v-text-field
-      filled
-      label="Google Analytics"
-      v-model="instance.googleAnalytics"
-      @input="modified=true"
-  />
-  <v-textarea
-      filled
-      label="Adresse"
-      v-model="instance.adresse"
-      @input="modified=true"
-  />
-  <v-switch
-      label="Payant"
-      color="success"
-      v-model="instance.payant"
-      @input="modified=true"
-      filled
-  />
-  <v-select
-      label="Status"
-      v-model="instance.status"
-      :items="['valid','warning','disabled']"
-      @input="modified=true"
-      filled
-      persistent-hint
-      :hint="instance.status"
-  />
+  <v-row>
+    <v-col cols="4">
+      <v-select
+          rounded
+          label="Status"
+          :background-color="$utils.statusToColor(instance.status)"
+          v-model="instance.status"
+          :items="[
+          {
+            value:'valid',
+            text:$utils.statusToLabel('valid')
+            },
+          {
+            value:'warning',
+            text:$utils.statusToLabel('warning')
+            },
+          {
+            value:'disabled',
+            text:$utils.statusToLabel('disabled')
+            },
+          ]"
+          @input="modified=true"
+          filled
+      />
+      <v-switch
+          label="Payant"
+          color="success"
+          v-model="instance.payant"
+          @input="modified=true"
+          filled
+      />
+    </v-col>
+    <v-col cols="8">
+      <v-textarea
+          filled
+          label="Warning"
+          v-model="instance.warning"
+          placeholder="Message à afficher..."
+          @input="modified=true"
+      />
+    </v-col>
 
-  <v-textarea
-      filled
-      label="Warning"
-      v-model="instance.warning"
-      placeholder="Message à afficher si inactif"
-      @input="modified=true"
-  />
+    <v-col cols="4">
+      <v-text-field
+          filled
+          label="Google Analytics"
+          v-model="instance.googleAnalytics"
+          @input="modified=true"
+      />
+      <div class="d-flex justify-space-between">
+        Version
+        <v-chip
+            class="mx-5"
+            small
+            :color="isVersionOk?'':'error'">
+          {{instance.version}}
+        </v-chip>
+
+        <v-btn
+            small
+            v-if="!isVersionOk"
+            @click="updatingVersion=true;$db.updateVersion(
+                instance,
+                ()=>{
+                  updatingVersion=false;
+                },
+                ()=>{
+                  updatingVersion=false;
+                },
+            )"
+            :loading="updatingVersion"
+            color="error">
+          Mettre à jour
+        </v-btn>
+
+      </div>
+    </v-col>
+    <v-col cols="8">
+      <v-text-field
+          filled
+          label="Url du suivi client"
+          placeholder="https://...."
+          v-model="instance.urlSuivi"
+          @input="modified=true"
+      />
+      <v-textarea
+          solo
+          label="Notes"
+          background-color="#FFFF99"
+          color="#222222" light
+          v-model="instance.notes"
+          placeholder="..."
+          @input="modified=true"
+      />
+    </v-col>
+
+  </v-row>
+
+
+
+
+
+
+
+
+
+
   <v-row>
     <v-col cols="">
-      Version
-      <v-chip
-          class="mx-5"
-          :color="isVersionOk?'':'error'">
-        {{instance.version}}
-      </v-chip>
-      <v-btn
-          v-if="!isVersionOk"
-          @click="$db.updateVersion(instance)"
-          color="error">Mettre à jour</v-btn>
+
     </v-col>
     <v-col class="d-flex">
       <v-spacer/>
@@ -91,7 +166,8 @@ export default {
   data:()=>{
     return{
       modified:false,
-      saving:false
+      saving:false,
+      updatingVersion:false
     }
   },
   props:{

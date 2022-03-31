@@ -100,4 +100,40 @@ export default class Utils{
         }
         return filesize(bytes,{locale:"fr",round:1});
     }
+
+    /**
+     * Renvoie le theme couleur en fonction du status
+     * @param status 'valid','warning','disabled'
+     * @return {string}
+     */
+    statusToColor(status){
+        switch (status){
+            case "warning":
+                return "warning";
+            case "disabled":
+                return "error";
+            case "valid":
+                return "success";
+            default:
+                return "non défini";
+        }
+    }
+    /**
+     * Renvoie le texte pour les humains en fonction du status
+     * @param status 'valid','warning','disabled'
+     * @return {string}
+     */
+    statusToLabel(status){
+        switch (status){
+            case "warning":
+                return "warning";
+            case "disabled":
+                return "désactivé";
+            case "valid":
+                return "valide";
+            default:
+                return "défaut";
+        }
+    }
+
 }

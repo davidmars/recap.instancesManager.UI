@@ -5,14 +5,44 @@ export default class Db{
          * @type {*[]}
          */
         this.instances=[];
-        this.refresh();
         this.isLoading=false;
+        this.refresh();
+
         /**
          * L'ionstance désignée comme étant master
          * @type {null|Object}
          */
         this.masterVersion=null;
 
+    }
+
+    /**
+     * Définit ou met à jour les instances
+     * @private
+     * @param instances
+     */
+    _setInstances(instances){
+        instances.forEach(inst=>{
+            let existing=this._getInstance(inst.href)
+            if(!existing){
+                this.instances.push(inst);
+            }else{
+                Object.assign(existing,inst);
+            }
+        });
+        this.masterVersion=this._getMaster().version;
+    }
+
+
+
+    /**
+     * Renvoie une instance à partir de son href
+     * @private
+     * @param href
+     * @return {*}
+     */
+    _getInstance(href){
+        return this.instances.find(i=>i.href===href);
     }
 
     /**
@@ -23,32 +53,26 @@ export default class Db{
         window.$api.getInstances((data)=>{
             this.isLoading=false;
             //this.instances=data.body.instances;
-            data.body.instances.forEach(inst=>{
-                let existing=this.getInstance(inst.href)
-                if(!existing){
-                    this.instances.push(inst);
-                }else{
-                    Object.assign(existing,inst);
-                }
-            });
-            this.masterVersion=this._getMaster().version;
+            this._setInstances(data.body.instances);
         })
-    }
-
-    getInstance(href){
-        return this.instances.find(i=>i.href===href);
     }
 
     /**
      * Pour enregistrer des modifs sur une instance
      * @param instance
      * @param cb
+     * @param cbError
      */
-    store(instance,cb=()=>{}){
+    store(instance,cb=()=>{},cbError=()=>{}){
         window.$api.store(
-            instance,()=>{
-                this.refresh();
+            instance,
+            (data)=>{
+                this._setInstances(data.body.instances);
                 cb();
+            },
+            ()=>{
+                this.refresh();
+                cbError();
             }
         )
     }
@@ -56,13 +80,24 @@ export default class Db{
     /**
      * Pour mettre à jour l'instance vers la nouvelle version
      * @param instance
+     * @param cb
+     * @param cbError
      */
-    updateVersion(instance){
-        window.$api.store(
-            instance,()=>{
-                this.refresh();
-            }
-        )
+    updateVersion(instance,cb=()=>{},cbError=()=>{}){
+        setTimeout(()=>{
+            window.$api.updateVersion(
+                instance,
+                (data)=>{
+                    this._setInstances(data.body.instances);
+                    cb();
+                },
+                ()=>{
+                    this.refresh();
+                    cbError();
+                }
+            )
+        },3000)
+
     }
 
     /**
