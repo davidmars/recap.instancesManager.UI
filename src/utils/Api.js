@@ -46,19 +46,17 @@ export default class Api{
         this._call("get/instances",{
         },cb);
     }
-    store(player,cb){
-        this._call("store",{
-            player:player
+    store(instance,cb){
+        this._call("set/store-instance",{
+            instance:instance
         },cb);
     }
-    details(player,cb){
-        this._call("details",{
-            id:player.id
+    updateVersion(instance,cb){
+        this._call("set/update-version",{
+            instance:instance
         },cb);
     }
-    im(player,im){
-        return `${this.apiUrl}/im?player=${player.id}&im=${im}&pwd=trucchose`
-    }
+
 
 
 

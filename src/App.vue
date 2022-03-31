@@ -7,22 +7,24 @@
       <v-dialog
           scrollable max-width="1000px"
           v-model="dialog">
-        <v-card dark v-if="selectedPlayer">
-          <v-card-title class="text-h5">
-            <v-list>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>{{selectedPlayer.name}}</v-list-item-title>
-                  <v-list-item-subtitle>{{selectedPlayer.email}}</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
+        <v-card dark v-if="selectedInstance">
+          <v-card-title >
+            <div class="d-flex">
+              {{ selectedInstance.name }}
+              <v-btn text class="caption"
+                     :href="selectedInstance.href"
+                      :target="selectedInstance.href">
+                {{ selectedInstance.href }}
+              </v-btn>
+            </div>
+
             <v-spacer/>
             <v-icon @click="dialog=false;">mdi-close</v-icon>
           </v-card-title>
-          <v-card-text>
-            <v-divider></v-divider>
-            <player-details :player="selectedPlayer"/>
+          <v-divider></v-divider>
+          <v-card-text class="my-5">
+            <instance-form :instance="selectedInstance"/>
+
           </v-card-text>
 
         </v-card>
@@ -95,6 +97,12 @@
                 }}</v-chip>
             </template>
 
+            <template v-slot:item.email="{ item }">
+              {{item.email}}
+              <pre class="mt-2">{{item.adresse}}</pre>
+
+            </template>
+
 
             <template v-slot:item.dirSize="{ item }">
               <div class="d-flex justify-space-between mb-2">
@@ -112,7 +120,7 @@
             </template>
 
             <template v-slot:item.actions="{ item }">
-              <v-btn color="yellow" light @click.prevent="details(item)">Details</v-btn>
+              <v-btn color="primary" light @click.prevent="details(item)">Details</v-btn>
             </template>
           </v-data-table>
         </v-container>
@@ -129,14 +137,15 @@
 
 
 
-import PlayerDetails from "@/player-details";
+
+import InstanceForm from "@/instance-form";
 export default {
   name: 'App',
-  components: {PlayerDetails},
+  components: {InstanceForm},
   data: () => ({
     search:'',
     dialog:false,
-    selectedPlayer:null
+    selectedInstance:null
   }),
   computed:{
     headers() {
@@ -156,18 +165,45 @@ export default {
           width: '400px'
         },
         {
+          text: 'Contact', //email adresse
+          align: 'start',
+          sortable: true,
+          value: 'email',
+          width: '300px'
+        },
+        {
           text: 'Date',
           align: 'start numeric',
           sortable: true,
           value: 'date',
-          width: '200px'
+          width: '100px'
+        },
+        {
+          text: 'Status',
+          align: 'start numeric',
+          sortable: true,
+          value: 'status',
+          width: '100px'
+        }, {
+          text: 'Payant',
+          align: 'start numeric',
+          sortable: true,
+          value: 'payant',
+          width: '100px'
+        },
+        {
+          text: 'Warning',
+          align: 'start numeric',
+          sortable: true,
+          value: 'warning',
+          width: '300px'
         },
         {
           text: 'Version',
           align: 'start numeric',
           sortable: true,
           value: 'version',
-          width: '200px'
+          width: '100px'
         },
         {
           text: 'Taille',
@@ -187,7 +223,8 @@ export default {
           text: '...',
           value: 'actions',
           sortable: false,
-          width: '200px'
+          width: '200px',
+          align: "right"
         },
       ]
     }
@@ -195,13 +232,13 @@ export default {
   watch:{
     dialog(){
       if(this.dialog === false){
-        this.selectedPlayer=false;
+        this.selectedInstance=false;
       }
     }
   },
   methods:{
     details(player){
-      this.selectedPlayer=player;
+      this.selectedInstance=player;
       this.dialog=true;
       console.log(player)
     }
