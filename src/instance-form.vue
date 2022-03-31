@@ -2,7 +2,7 @@
 <div>
   <v-row>
     <v-col cols="4">
-      <v-avatar tile color="#EEEEEE" size="300" >
+      <v-avatar tile color="#EEEEEE" size="300">
         <v-img :src="instance.hrefLogo" contain/>
       </v-avatar>
     </v-col>
@@ -64,6 +64,8 @@
           filled
       />
     </v-col>
+
+
     <v-col cols="8">
       <v-textarea
           filled
@@ -81,7 +83,9 @@
           v-model="instance.googleAnalytics"
           @input="modified=true"
       />
-      <div class="d-flex justify-space-between">
+
+      <!-- version et mise à jour-->
+      <div v-if="existe" class="d-flex justify-space-between">
         Version
         <v-chip
             class="mx-5"
@@ -89,9 +93,8 @@
             :color="isVersionOk?'':'error'">
           {{instance.version}}
         </v-chip>
-
         <v-btn
-            small
+
             v-if="!isVersionOk"
             @click="updatingVersion=true;$db.updateVersion(
                 instance,
@@ -103,7 +106,7 @@
                 },
             )"
             :loading="updatingVersion"
-            color="error">
+            color="error" small>
           Mettre à jour
         </v-btn>
 
@@ -131,14 +134,6 @@
   </v-row>
 
 
-
-
-
-
-
-
-
-
   <v-row>
     <v-col cols="">
 
@@ -146,15 +141,28 @@
     <v-col class="d-flex">
       <v-spacer/>
       <v-btn
+          v-if="existe"
           :disabled="!modified"
-          @click="saving=true;$db.store(instance,()=>
-          {
+          :loading="saving"
+          @click="saving=true;$db.store(instance,()=>{
             modified=false;
+            saving=false;
+          })"
+          color="success">Enregistrer</v-btn>
+      <v-btn
+          v-else
+          :disabled="!modified"
+          :loading="saving"
+          @click="saving=true;$db.create(instance,
+          ()=>{
+            modified=false;
+            saving=false;
+          },
+          ()=>{
             saving=false;
           }
           )"
-          :loading="saving"
-          color="success">Enregistrer</v-btn>
+          color="success">Créer</v-btn>
     </v-col>
   </v-row>
 </div>
@@ -176,6 +184,9 @@ export default {
     }
   },
   computed:{
+    existe(){
+      return this.instance.version
+    },
     isVersionOk(){
       return this.instance.version === this.$db.masterVersion;
     }

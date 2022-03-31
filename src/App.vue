@@ -6,25 +6,24 @@
       <!-- popin detail-->
       <v-dialog
           scrollable max-width="1000px"
-          v-model="dialog">
-        <v-card dark v-if="selectedInstance">
-          <v-card-title >
+          v-model="$manager.dialogOpen">
+        <v-card dark v-if="$manager.selectedInstance">
+          <v-card-title>
             <div class="d-flex">
-              {{ selectedInstance.name }}
+              {{ $manager.selectedInstance.name }}
               <v-btn text class="caption"
-                     :href="selectedInstance.href"
-                      :target="selectedInstance.href">
-                {{ selectedInstance.href }}
+                     :href="$manager.selectedInstance.href"
+                      :target="$manager.selectedInstance.href">
+                {{ $manager.selectedInstance.href }}
               </v-btn>
             </div>
 
             <v-spacer/>
-            <v-icon @click="dialog=false;">mdi-close</v-icon>
+            <v-icon @click="$manager.dialogOpen=false;">mdi-close</v-icon>
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text class="my-5">
-            <instance-form :instance="selectedInstance"/>
-
+            <instance-form :instance="$manager.selectedInstance"/>
           </v-card-text>
 
         </v-card>
@@ -46,10 +45,14 @@
               dense
           >
 
+
+
+
             <template v-slot:top>
               <div class="d-flex align-center pa-5">
                 Instances
-                <v-spacer/>
+                <span class="ml-2 grey--text">({{$db.instances.length}})</span>
+
                 <!-- refresh-->
                 <v-btn
                     fab class="mx-5" small
@@ -57,18 +60,32 @@
                     @click="$db.refresh();">
                   <v-icon>mdi-sync</v-icon>
                 </v-btn>
+
+                <v-spacer/>
+
+
+
                 <!-- search-->
                 <v-text-field
+                    dense
                     v-model="search"
-                    rounded filled
-                    clearable
-                    append-icon="mdi-magnify"
+                    rounded filled single-line hide-details
+                    append-icon="mdi-magnify" clearable
                     label="Rechercher"
-                    single-line
-                    hide-details
                 ></v-text-field>
+
+                <!--nouvelle instance-->
+                <v-btn class="ml-5" color="success" @click="ajouterInstance()">
+                  <v-icon left>mdi-plus-circle</v-icon>
+                  Nouvelle instance
+                </v-btn>
+
               </div>
             </template>
+
+
+
+
 
 
             <!--logo-->
@@ -146,11 +163,13 @@
 
               <v-btn v-if="item.urlSuivi"
                      class="mb-3"
-                     small rounded
-                     color="primary"
+                     small
+                     color="success"
                     :target="item.urlSuivi"
                     :href="item.urlSuivi">
+                <v-icon left>mdi-chart-box</v-icon>
                 Suivi client
+
               </v-btn>
 
               <v-sheet
@@ -276,13 +295,13 @@ export default {
   methods:{
     clickRow(event,line){
       const instance=line.item;
-      this.selectedInstance=instance;
-      this.dialog=true;
+      this.$manager.selectedInstance=instance;
+      this.$manager.dialogOpen=true;
     },
-    details(player){
-      this.selectedInstance=player;
-      this.dialog=true;
-      console.log(player)
+    ajouterInstance(){
+      let instance={};
+      this.$manager.selectedInstance=instance;
+      this.$manager.dialogOpen=true;
     }
   }
 };

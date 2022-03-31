@@ -6,23 +6,40 @@ import Api from "./utils/Api";
 
 Vue.config.productionTip = false
 
+/**
+ *
+ * @type {Manager}
+ */
+window.$manager=new Manager();
+Vue.prototype.$manager = Vue.observable(window.$manager);
+
+
 let apiUrl="https://recap.tw/im.api/api";
+/**
+ *
+ * @type {Api}
+ */
 window.$api=new Api(apiUrl);
 Vue.prototype.$api = Vue.observable(window.$api);
 
+/**
+ *
+ * @type {Db}
+ */
 window.$db=new Db();
 Vue.prototype.$db = Vue.observable(window.$db);
 
+/**
+ *
+ * @type {Utils}
+ */
 window.$utils=new Utils();
 Vue.prototype.$utils = Vue.observable(window.$utils);
 
-import VueLayers from 'vuelayers';
+
 import Db from "@/Db";
 import Utils from "@/utils/Utils";
-Vue.use(VueLayers, {
-    // global data projection, see https://vuelayers.github.io/#/quickstart?id=global-data-projection
-    dataProjection: 'EPSG:4326',
-})
+import Manager from "@/Manager";
 
 new Vue({
   vuetify,

@@ -50,6 +50,13 @@ export default class Api{
             instance:instance
         },cb,cbError);
     }
+    create(instance,cb,cbError){
+        this._call("set/create-instance",{
+            societe:instance.societe,
+            email:instance.email,
+            instance:instance
+        },cb,cbError);
+    }
     updateVersion(instance,cb,cbError){
         this._call("set/update-version",{
             instance:instance

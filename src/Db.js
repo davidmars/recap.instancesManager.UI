@@ -56,7 +56,28 @@ export default class Db{
             this._setInstances(data.body.instances);
         })
     }
-
+    /**
+     * Pour créer une instance
+     * @param instance
+     * @param cb
+     * @param cbError
+     */
+    create(instance,cb=()=>{},cbError=()=>{}){
+        window.$api.create(
+            instance,
+            (data)=>{
+                this._setInstances(data.body.instances);
+                window.$manager.selectedInstance=this._getInstance(
+                    data.body.newInstance.href
+                );
+                cb();
+            },
+            ()=>{
+                this.refresh();
+                cbError();
+            }
+        );
+    }
     /**
      * Pour enregistrer des modifs sur une instance
      * @param instance
