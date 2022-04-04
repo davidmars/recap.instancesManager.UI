@@ -262,6 +262,20 @@ export default {
           width: '100px'
         },
         {
+          text: 'Nombre relevés',
+          align: 'start numeric',
+          sortable: true,
+          value: 'countReleves',
+          width: '100px'
+        },
+        {
+          text: 'Dernier relevé',
+          align: 'start numeric',
+          sortable: true,
+          value: 'lastReleve',
+          width: '100px'
+        },
+        {
           text: 'Taille',
           align: 'start numeric',
           sortable: true,

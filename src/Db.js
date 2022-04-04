@@ -1,8 +1,10 @@
+import Instance from "@/Instance";
+
 export default class Db{
     constructor() {
         /**
          * La liste des instances
-         * @type {*[]}
+         * @type {Instance[]}
          */
         this.instances=[];
         this.isLoading=false;
@@ -25,9 +27,9 @@ export default class Db{
         instances.forEach(inst=>{
             let existing=this._getInstance(inst.href)
             if(!existing){
-                this.instances.push(inst);
+                this.instances.push(new Instance().load(inst));
             }else{
-                Object.assign(existing,inst);
+                existing.load(inst);
             }
         });
         this.masterVersion=this._getMaster().version;

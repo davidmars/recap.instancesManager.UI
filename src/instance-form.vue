@@ -95,7 +95,7 @@
         </v-chip>
         <v-btn
 
-            v-if="!isVersionOk"
+            zzzv-if="!isVersionOk"
             @click="updatingVersion=true;$db.updateVersion(
                 instance,
                 ()=>{
