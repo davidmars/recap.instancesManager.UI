@@ -1,4 +1,5 @@
 const axios = require('axios').default;
+const md5 = require('md5');
 export default class Api{
     /**
      *
@@ -6,6 +7,7 @@ export default class Api{
      */
     constructor(apiUrl) {
         this.apiUrl=apiUrl;
+        this.cleanPwd="";
     }
 
     _manageResponse(response,cbSuccess,cbError){
@@ -13,6 +15,10 @@ export default class Api{
         if(response.data){
             if(!response.data.success){
                 console.error('api error',response.data);
+                response.data.errors.forEach((err)=>{
+                    console.log("ok");
+                    window.$manager.errors.push(err.message);
+                });
                 cbError(response.data);
             }else{
                 cbSuccess(response.data);
@@ -25,7 +31,7 @@ export default class Api{
 
     _call(action,params,cbSuccess,cbError=function(){}){
         let me=this;
-        params.pwd="15468971";
+        params.pwd=md5(this.cleanPwd);
         axios.post(`${this.apiUrl}/${action}`,
             params,//{headers:h}
         )
@@ -40,7 +46,12 @@ export default class Api{
             // always executed
         });
     }
-
+    login(cb,cbError){
+        this._call("get/login",{},function(){
+            window.$manager.loggedIn=true;
+            window.$db.refresh()
+        },cbError);
+    }
     getInstances(cb,cbError){
         this._call("get/instances",{
         },cb,cbError);

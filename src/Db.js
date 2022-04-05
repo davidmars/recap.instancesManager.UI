@@ -8,7 +8,7 @@ export default class Db{
          */
         this.instances=[];
         this.isLoading=false;
-        this.refresh();
+        //this.refresh();
 
         /**
          * L'ionstance désignée comme étant master

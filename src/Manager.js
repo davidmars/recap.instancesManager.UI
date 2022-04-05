@@ -10,5 +10,41 @@ export default class Manager{
          * @type {boolean}
          */
        this.dialogOpen=false;
+
+        /**
+         * Les erreurs à afficher (une pile ui les affiche une par une)
+         * @type {String[]}
+         */
+       this.errors=[];
+
+        this.loggedIn=false;
+
+    }
+
+    get displayLogin(){
+        return !this.loggedIn;
+    }
+
+    /**
+     * Renvoie l'erreur à afficher si il y a lieu
+     * @return {String|false}
+     */
+    get error(){
+        if(this.errors.length){
+            return this.errors[0];
+        }
+        return false;
+    }
+    get hasErrors(){
+        return this.errors.length>0;
+    }
+
+    /**
+     * Efface l'erreur actuellement affichée
+     */
+    killError(){
+        if(this.errors.length){
+            this.errors.shift();
+        }
     }
 }

@@ -3,6 +3,11 @@
 
     <v-main>
 
+      <login-dialog/>
+
+      <!-- erreurs-->
+      <error-dialog/>
+
       <!-- popin detail-->
       <v-dialog
           scrollable max-width="1000px"
@@ -29,8 +34,9 @@
         </v-card>
       </v-dialog>
 
-      <v-sheet dark height="100vh">
+      <v-sheet dark height="100vh" >
           <v-data-table
+              v-if="$manager.loggedIn"
               class="the-table"
               @dblclick:row="clickRow"
               height="calc( 100vh - 80px - 75px)"
@@ -203,9 +209,11 @@
 
 
 import InstanceForm from "@/instance-form";
+import ErrorDialog from "@/error-dialog";
+import LoginDialog from "@/login-dialog";
 export default {
   name: 'App',
-  components: {InstanceForm},
+  components: {LoginDialog, ErrorDialog, InstanceForm},
   data: () => ({
     search:'',
     dialog:false,
