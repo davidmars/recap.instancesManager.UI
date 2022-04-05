@@ -73,6 +73,7 @@
           v-model="instance.warning"
           placeholder="Message à afficher..."
           @input="modified=true"
+          auto-grow
       />
     </v-col>
 
@@ -123,6 +124,7 @@
       <v-textarea
           solo
           label="Notes"
+          auto-grow
           background-color="#FFFF99"
           color="#222222" light
           v-model="instance.notes"
@@ -165,6 +167,25 @@
           color="success">Créer</v-btn>
     </v-col>
   </v-row>
+
+  <v-data-table
+      v-if="instance.comptes"
+      class="my-5"
+      :items="instance.comptes"
+      :headers="[
+          {'value':'name',text:'Compte'},
+          {'value':'email',text:'Email'},
+          {'value':'issuperviseur',text:'Superviseur'},
+          {'value':'etat',text:'État'},
+          ]"
+      hide-default-footer
+  >
+    <template v-slot:item.issuperviseur="{ item }">
+      <v-icon v-if="item.issuperviseur" color="success">mdi-check-circle</v-icon>
+      <v-icon v-else color="grey">mdi-close-circle</v-icon>
+    </template>
+  </v-data-table>
+
 </div>
 </template>
 

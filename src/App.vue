@@ -83,11 +83,6 @@
               </div>
             </template>
 
-
-
-
-
-
             <!--logo-->
             <template v-slot:item.hrefLogo="{ item }">
               <v-avatar tile color="#EEEEEE" size="100">
@@ -142,6 +137,19 @@
                       :color="item.version !== $db.masterVersion?'error':''">
                       {{item.version}}
               </v-chip>
+            </template>
+
+            <!--comptes-->
+            <template v-slot:item.countHumains="{ item }">
+              <div>{{item.countHumains}}</div>
+
+
+
+              <div v-for="(cpte,i) of item.comptes" :key="i" class="grey--text">
+                {{cpte.email}}
+              </div>
+
+
             </template>
 
             <!--dir size-->
@@ -201,6 +209,9 @@ export default {
   data: () => ({
     search:'',
     dialog:false,
+    /**
+     * @type {Instance}
+     */
     selectedInstance:null
   }),
   computed:{
@@ -262,10 +273,17 @@ export default {
           width: '100px'
         },
         {
-          text: 'Nombre relevés',
+          text: 'Relevés',
           align: 'start numeric',
           sortable: true,
           value: 'countReleves',
+          width: '100px'
+        },
+        {
+          text: 'Membres',
+          align: 'start numeric',
+          sortable: true,
+          value: 'countHumains',
           width: '100px'
         },
         {

@@ -1,4 +1,5 @@
 import {default as axios} from "axios";
+import InstanceCompte from "@/InstanceCompte";
 
 export default class Instance{
     constructor() {
@@ -14,8 +15,7 @@ export default class Instance{
         this.payant=""
         this.warning=""
         this.version=""
-        this.countReleves=0
-        this.lastReleve=""
+
         this.dirSize=0;
         this.dirSizeDetails={
             cache: 0,
@@ -27,6 +27,18 @@ export default class Instance{
         }
         this.googleAnalytics=""
         this.notes=""
+
+        //--------vient de l'instance en direct--------
+
+        this.countReleves=0
+        this.countHumains=0
+        this.lastReleve=""
+        /**
+         *
+         * @type {InstanceCompte[]}
+         */
+        this.comptes=[];
+
     }
 
     /**
@@ -51,8 +63,17 @@ export default class Instance{
             .then(function (response) {
                 console.log("response",response)
                 if(response.data.success){
-                   me.lastReleve=response.data.json.lastReleve;
-                   me.countReleves=response.data.json.countReleves;
+                    const json=response.data.json;
+                   me.lastReleve=json.lastReleve;
+                   me.countReleves=json.countReleves;
+                   me.countHumains=json.countHumains;
+                   me.comptes=[];
+                   if(json.comptes){
+                       json.comptes.forEach((cpte)=>{
+                           me.comptes.push(new InstanceCompte().load(cpte))
+                       });
+                   }
+
                 }
             })
             .catch(function (error) {
@@ -61,5 +82,6 @@ export default class Instance{
             .then(function () {
                 // always executed
             });
+
     }
 }
