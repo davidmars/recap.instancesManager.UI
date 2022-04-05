@@ -1,5 +1,6 @@
 import {default as axios} from "axios";
 import InstanceCompte from "@/InstanceCompte";
+const md5 = require('md5');
 
 export default class Instance{
     constructor() {
@@ -57,8 +58,10 @@ export default class Instance{
         this.lastReleve=null;
         this.countReleves=null;
         let me=this;
-        axios.post(`${this.server}/v/api/public-infos`,
-            {},//{headers:h}
+        axios.post(`${this.server}/v/im.api/public-infos`,
+            {
+                pwd:md5(window.$api.cleanPwd)
+            },//{headers:h}
         )
             .then(function (response) {
                 console.log("response",response)
