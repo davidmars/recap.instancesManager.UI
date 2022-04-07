@@ -109,11 +109,17 @@ export default class Utils{
     statusToColor(status){
         switch (status){
             case "warning":
+            case "brouillon":
                 return "warning";
+
             case "disabled":
+            case "archive":
                 return "error";
+
             case "valid":
+            case "en ligne":
                 return "success";
+
             default:
                 return "non défini";
         }

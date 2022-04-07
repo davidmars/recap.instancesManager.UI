@@ -103,12 +103,15 @@
             <template v-slot:item.societe="{ item }">
               <template v-if="item.isValid">
                 <div class="subtitle-2 mb-3">{{item.societe}}</div>
-                <v-icon color="success">mdi-check-circle</v-icon>
-                <v-btn class="numeric"
-                       :target="item.href"
-                       text :href="item.href">
-                  {{item.href}}
-                </v-btn>
+                <div class="text-no-wrap">
+                  <v-icon color="success">mdi-check-circle</v-icon>
+                  <v-btn class="numeric"
+                         :target="item.href"
+                         text :href="item.href">
+                    {{item.href}}
+                  </v-btn>
+                </div>
+
               </template>
               <template v-else>
                 <div class="subtitle-2 mb-3">{{item.name}}</div>
@@ -119,7 +122,18 @@
             <!--contact email/adresse-->
             <template v-slot:item.email="{ item }">
               {{item.email}}
+              <span class="ml-2 grey--text"
+                    :title="`${item.totalInstancesForEmail} instances avec ce contact`"
+                    x-small
+                      v-if="item.totalInstancesForEmail>1">
+                {{item.totalInstancesForEmail}}
+              </span>
               <pre class="mt-2">{{item.adresse}}</pre>
+            </template>
+
+            <!--date-->
+            <template v-slot:item.date="{ item }">
+              <cell-date :date="item.date" />
             </template>
 
             <!--status-->
@@ -145,18 +159,17 @@
               </v-chip>
             </template>
 
+            <!--dernier relevé-->
+            <template v-slot:item.lastReleve="{ item }">
+              <cell-date :date="item.lastReleve" />
+            </template>
+
             <!--comptes-->
             <template v-slot:item.countHumains="{ item }">
               <div>{{item.countHumains}}</div>
-
-
-
-              <div v-for="(cpte,i) of item.comptes" :key="i" class="grey--text">
-                {{cpte.email}}
-              </div>
-
-
             </template>
+
+
 
             <!--dir size-->
             <template v-slot:item.dirSize="{ item }">
@@ -211,9 +224,10 @@
 import InstanceForm from "@/instance-form";
 import ErrorDialog from "@/error-dialog";
 import LoginDialog from "@/login-dialog";
+import CellDate from "@/table/cell-date";
 export default {
   name: 'App',
-  components: {LoginDialog, ErrorDialog, InstanceForm},
+  components: {CellDate, LoginDialog, ErrorDialog, InstanceForm},
   data: () => ({
     search:'',
     dialog:false,
@@ -247,7 +261,7 @@ export default {
           width: '300px'
         },
         {
-          text: 'Date',
+          text: 'Date d\'installation',
           align: 'start numeric',
           sortable: true,
           value: 'date',
@@ -288,6 +302,13 @@ export default {
           width: '100px'
         },
         {
+          text: 'Dernier relevé',
+          align: 'start numeric',
+          sortable: true,
+          value: 'lastReleve',
+          width: '100px'
+        },
+        {
           text: 'Membres',
           align: 'start numeric',
           sortable: true,
@@ -295,10 +316,17 @@ export default {
           width: '100px'
         },
         {
-          text: 'Dernier relevé',
+          text: 'Équipes',
           align: 'start numeric',
           sortable: true,
-          value: 'lastReleve',
+          value: 'countEquipes',
+          width: '100px'
+        },
+        {
+          text: 'Thématiques de risque',
+          align: 'start numeric',
+          sortable: true,
+          value: 'countTDR',
           width: '100px'
         },
         {

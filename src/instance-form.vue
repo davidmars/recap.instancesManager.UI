@@ -205,13 +205,30 @@
           {'value':'name',text:'Compte'},
           {'value':'email',text:'Email'},
           {'value':'issuperviseur',text:'Superviseur'},
-          {'value':'etat',text:'État'},
+          {'value':'etat',text:'État','width':0},
           ]"
       hide-default-footer
   >
     <template v-slot:item.issuperviseur="{ item }">
-      <v-icon v-if="item.issuperviseur" color="success">mdi-check-circle</v-icon>
-      <v-icon v-else color="grey">mdi-close-circle</v-icon>
+      <v-simple-checkbox
+          :ripple="false"
+          @input="instance.updateCompte(item);"
+          v-model="item.issuperviseur"
+         color="success"/>
+    </template>
+    <template v-slot:item.etat="{ item }">
+      <v-select
+          :background-color="$utils.statusToColor(item.etat)"
+          hide-details
+          @input="instance.updateCompte(item);"
+          filled rounded dense
+          v-model="item.etat"
+          :items="[
+            'en ligne',
+            'brouillon',
+            'archive'
+            ]"
+      />
     </template>
   </v-data-table>
 
