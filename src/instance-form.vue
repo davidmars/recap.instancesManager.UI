@@ -17,10 +17,39 @@
       <v-text-field
           autocomplete="new-password"
           label="Email client"
+          :background-color="!existe?'#676':''"
           v-model="instance.email"
           @input="modified=true"
           filled
       />
+      <template v-if="!existe">
+        <v-text-field
+            background-color="#676"
+            autocomplete="new-password"
+            label="Nom superviseur"
+            v-model="instance.userNom"
+            @input="modified=true"
+            filled
+        />
+        <v-text-field
+            background-color="#676"
+            autocomplete="new-password"
+            label="Prénom superviseur"
+            v-model="instance.userPrenom"
+            @input="modified=true"
+            filled
+        />
+        <v-text-field
+            background-color="#676"
+            autocomplete="new-password"
+            label="Mot de passe superviseur"
+            v-model="instance.userPwd"
+            @input="modified=true"
+            filled
+        />
+      </template>
+
+
       <v-textarea
           autocomplete="new-password"
           filled

@@ -65,6 +65,9 @@ export default class Api{
         this._call("set/create-instance",{
             societe:instance.societe,
             email:instance.email,
+            userNom:instance.userNom,
+            userPrenom:instance.userPrenom,
+            userPwd:instance.userPwd,
             instance:instance
         },cb,cbError);
     }
