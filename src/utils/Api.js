@@ -7,7 +7,7 @@ export default class Api{
      */
     constructor(apiUrl) {
         this.apiUrl=apiUrl;
-        this.cleanPwd="";
+        this.cleanPwd=localStorage.getItem("pwd");
     }
 
     _manageResponse(response,cbSuccess,cbError){
@@ -47,10 +47,17 @@ export default class Api{
         });
     }
     login(cb,cbError){
-        this._call("get/login",{},function(){
+        this._call("get/login",{},
+            ()=>{
             window.$manager.loggedIn=true;
             window.$db.refresh()
-        },cbError);
+            localStorage.setItem("pwd",this.cleanPwd);
+            },
+            ()=>{
+                localStorage.removeItem("pwd");
+            cbError();
+            }
+        );
     }
     getInstances(cb,cbError){
         this._call("get/instances",{

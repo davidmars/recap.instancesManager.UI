@@ -37,7 +37,18 @@
 
 <script>
 export default {
-  name: "login-dialog"
+  name: "login-dialog",
+  mounted(){
+    if(window.$api.cleanPwd){
+      window.$api.login(()=>{},()=>{
+        setTimeout(()=>{
+          window.$api.cleanPwd="";
+          this.$manager.errors=[]
+        },100)
+
+      });
+    }
+  }
 }
 </script>
 
