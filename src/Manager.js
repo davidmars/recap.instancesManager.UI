@@ -2,7 +2,7 @@ export default class Manager{
     constructor() {
         /**
          * Instance en cours d'édition
-         * @type {null|Object}
+         * @type {null|Instance}
          */
        this.selectedInstance=null;
         /**

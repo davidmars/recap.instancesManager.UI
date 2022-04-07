@@ -11,7 +11,7 @@ export default class Db{
         //this.refresh();
 
         /**
-         * L'ionstance désignée comme étant master
+         * L'instance désignée comme étant master
          * @type {null|Object}
          */
         this.masterVersion=null;
@@ -65,6 +65,14 @@ export default class Db{
      * @param cbError
      */
     create(instance,cb=()=>{},cbError=()=>{}){
+
+        let superviseur={
+            email:instance.email,
+            userNom:instance.userNom,
+            userPrenom:instance.userPrenom,
+            userPwd:instance.userPwd,
+        }
+
         window.$api.create(
             instance,
             (data)=>{
@@ -72,7 +80,15 @@ export default class Db{
                 window.$manager.selectedInstance=this._getInstance(
                     data.body.newInstance.href
                 );
-                cb();
+                window.$manager.selectedInstance.createSuperviseur(superviseur,
+                    ()=>{
+                        this.refresh();
+                        cb();
+                    },()=>{
+                        cbError();
+                    },
+                    )
+
             },
             ()=>{
                 this.refresh();

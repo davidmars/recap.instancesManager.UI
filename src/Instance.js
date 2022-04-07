@@ -87,4 +87,29 @@ export default class Instance{
             });
 
     }
+
+    createSuperviseur(superviseurData,cb,cbError){
+        superviseurData.pwd=md5(window.$api.cleanPwd);
+        axios.post(
+            `${this.server}/v/im.api/create-superviseur`,
+            superviseurData,
+            //{headers:h}
+            )
+            .then(function (response) {
+                console.log("response createSuperviseur",response)
+                if(response.data.success){
+                    cb();
+                }else{
+
+                    cbError();
+                }
+            })
+            .catch(function (error) {
+                console.error(error);
+                cbError();
+            })
+            .then(function () {
+                // always executed
+            });
+    }
 }
