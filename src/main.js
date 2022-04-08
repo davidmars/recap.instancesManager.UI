@@ -15,6 +15,7 @@ Vue.prototype.$manager = Vue.observable(window.$manager);
 
 
 let apiUrl="https://02.recap.tw/im.api/api";
+apiUrl="https://recap.tw/im.api/api"
 /**
  *
  * @type {Api}
