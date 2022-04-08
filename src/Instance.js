@@ -55,7 +55,6 @@ export default class Instance{
         this.loadFromInstance();
         return this;
     }
-
     /**
      * Met à jour les données depuis l'instance
      */
@@ -71,7 +70,6 @@ export default class Instance{
             },//{headers:h}
         )
             .then(function (response) {
-                console.log("response",response)
                 me._isLoading=false;
                 if(response.data.success){
                     const json=response.data.json;
@@ -86,7 +84,6 @@ export default class Instance{
                            me.comptes.push(new InstanceCompte().load(cpte))
                        });
                    }
-
                 }
             })
             .catch(function (error) {
@@ -132,7 +129,7 @@ export default class Instance{
     }
 
     /**
-     * Met à jour le compte (humain)
+     * Save -- Met à jour le compte (humain)
      * @param compteData
      * @param cb
      * @param cbError
@@ -174,4 +171,45 @@ export default class Instance{
         }
         return window.$db.instances.filter(i=>i.email===this.email).length;
     }
+
+    /**
+     *
+     * @param {File} file
+     */
+    uploadLogo(file){
+        let me=this;
+        console.log("upload file",file);
+        this._isLoading=true;
+        let formData = new FormData();
+        formData.append("file", file);
+        formData.append("fileName", file.name);
+        formData.append("pwd",md5(window.$api.cleanPwd))
+
+        axios.post(`${this.server}/v/im.api/update-logo`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(function (response) {
+            if(response.data.success){
+                window.$db.refresh(
+                    function(){
+                        me._isLoading=false;
+                    }
+                );
+            }else{
+                console.error(response.data.errors);
+                response.data.errors.forEach((err=>{
+                    window.$manager.errors.push(err)
+                }))
+                me._isLoading=false;
+            }
+        }).catch(function (error) {
+                console.error(error);
+                window.$manager.errors.push(`Erreur ajax pour ${me.server}/v/im.api/update-logo`)
+                me._isLoading=false;
+        })
+
+    }
+
+
 }

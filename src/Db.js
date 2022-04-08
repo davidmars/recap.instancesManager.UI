@@ -50,12 +50,13 @@ export default class Db{
     /**
      * Met à jour toutes les données
      */
-    refresh(){
+    refresh(cb=()=>{}){
         this.isLoading=true;
         window.$api.getInstances((data)=>{
             this.isLoading=false;
             //this.instances=data.body.instances;
             this._setInstances(data.body.instances);
+            cb();
         })
     }
     /**

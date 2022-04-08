@@ -8,6 +8,13 @@ Vue.config.productionTip = false
 
 /**
  *
+ * @type {Utils}
+ */
+window.$utils=new Utils();
+Vue.prototype.$utils = Vue.observable(window.$utils);
+
+/**
+ *
  * @type {Manager}
  */
 window.$manager=new Manager();
@@ -30,12 +37,7 @@ Vue.prototype.$api = Vue.observable(window.$api);
 window.$db=new Db();
 Vue.prototype.$db = Vue.observable(window.$db);
 
-/**
- *
- * @type {Utils}
- */
-window.$utils=new Utils();
-Vue.prototype.$utils = Vue.observable(window.$utils);
+
 
 
 import Db from "@/Db";

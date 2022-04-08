@@ -4,6 +4,13 @@ export default class EE09localStorage{
     }
 
     /**
+     * Efface la variable du local storage
+     * @param prop
+     */
+    remove(prop){
+        localStorage.removeItem(prop);
+    }
+    /**
      * Renvoie un booleen
      * @param prop
      * @param defaultVal

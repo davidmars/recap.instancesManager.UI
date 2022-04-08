@@ -7,11 +7,11 @@ export default class Api{
      */
     constructor(apiUrl) {
         this.apiUrl=apiUrl;
-        this.cleanPwd=localStorage.getItem("pwd");
+        this.cleanPwd=window.$utils.ls.getString("pwd");
     }
 
     _manageResponse(response,cbSuccess,cbError){
-        console.log(response.data);
+        //console.log(response.data);
         if(response.data){
             if(!response.data.success){
                 console.error('api error',response.data);
@@ -51,10 +51,11 @@ export default class Api{
             ()=>{
             window.$manager.loggedIn=true;
             window.$db.refresh()
-            localStorage.setItem("pwd",this.cleanPwd);
+            window.$utils.ls.setString("pwd",this.cleanPwd);
             },
             ()=>{
-                localStorage.removeItem("pwd");
+                window.$utils.ls.remove("pwd");
+
             cbError();
             }
         );

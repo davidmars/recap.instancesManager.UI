@@ -17,8 +17,32 @@
   <v-row>
     <v-col cols="4">
       <v-avatar tile color="#EEEEEE" size="300">
-        <v-img :src="instance.hrefLogo" contain/>
+        <v-img :src="instance.hrefLogo" contain v-if="existe">
+          <v-btn fab style="right: 10px;position: absolute;bottom: 10px;">
+            <v-icon >mdi-cloud-upload</v-icon>
+          </v-btn>
+          <!-- HTML5 Input Form Elements -->
+          <input
+              style="
+              left: 0;
+              position: absolute;
+              top:0px;
+              width: 100%;
+              height: 100%;
+              opacity: 0;
+              "
+              type="file"
+              name="fileupload"
+              @change="upload"
+              accept="image/*"
+          />
+        </v-img>
+
       </v-avatar>
+
+
+
+
     </v-col>
     <v-col cols="8">
       <v-text-field
@@ -270,6 +294,12 @@ export default {
     },
     isVersionOk(){
       return this.instance.version === this.$db.masterVersion;
+    }
+  },
+  methods:{
+    upload(a){
+      let file=a.target.files[0];
+      this.instance.uploadLogo(file);
     }
   }
 

@@ -51,9 +51,6 @@
               }"
               dense
           >
-
-
-
             <!-- TOP ----------------------------------- -->
             <template v-slot:top>
               <div class="d-flex align-center pa-5">
@@ -67,6 +64,34 @@
                   <v-icon>mdi-sync</v-icon>
                 </v-btn>
                 <v-spacer/>
+                <!--select colonnes-->
+                <v-select
+                    dense
+                    class="mx-4"
+                    style="max-width: 700px;"
+                    v-model="headers"
+                    :items="allHeaders"
+                    item-text="text"
+                    item-value="value"
+                    label="Colonnes"
+                    filled rounded
+                    multiple
+                    return-object
+                    single-line
+                    hide-details
+                >
+                  <template v-slot:selection="{ item, index }">
+                    <span class="grey--text text-caption mr-4" v-if="index === 0">Afficher</span>
+                    <v-chip v-if="index <= 3" x-small>
+                      <span>{{ item.text }}</span>
+                    </v-chip>
+                    <span v-if="index === 4"
+                          class="grey--text text-caption"
+                    >
+                      (+{{ headers.length - 4 }})
+                    </span>
+                  </template>
+                </v-select>
                 <!-- search-->
                 <v-text-field
                     dense
@@ -278,124 +303,169 @@ export default {
     /**
      * @type {Instance}
      */
-    selectedInstance:null
+    selectedInstance:null,
+    /**
+     * Tous les headers (même ceux qu'on affiche pas)
+     */
+    allHeaders:[
+      {
+        text: 'Logo',
+        align: 'start',
+        sortable: true,
+        value: 'hrefLogo',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Société',
+        align: 'start',
+        sortable: true,
+        value: 'societe',
+        width: '350px',
+        display:true,
+      },
+      {
+        text: 'Contact', //email adresse
+        align: 'start',
+        sortable: true,
+        value: 'email',
+        width: '300px',
+        display:true,
+      },
+      {
+        text: 'Date d\'installation',
+        align: 'start numeric',
+        sortable: true,
+        value: 'date',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Status',
+        align: 'start numeric',
+        sortable: true,
+        value: 'status',
+        width: '100px',
+        display:true,
+      }, {
+        text: 'Payant',
+        align: 'start numeric',
+        sortable: true,
+        value: 'payant',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Warning',
+        align: 'start numeric',
+        sortable: true,
+        value: 'warning',
+        width: '200px',
+        display:true,
+      },
+      {
+        text: 'Version',
+        align: 'start numeric',
+        sortable: true,
+        value: 'version',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Relevés',
+        align: 'start numeric',
+        sortable: true,
+        value: 'countReleves',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Dernier relevé',
+        align: 'start numeric',
+        sortable: true,
+        value: 'lastReleve',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Membres',
+        align: 'start numeric',
+        sortable: true,
+        value: 'countHumains',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Équipes',
+        align: 'start numeric',
+        sortable: true,
+        value: 'countEquipes',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Thématiques de risque',
+        align: 'start numeric',
+        sortable: true,
+        value: 'countTDR',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Taille',
+        align: 'start numeric',
+        sortable: true,
+        value: 'dirSize',
+        width: '200px',
+        display:true,
+      },
+      {
+        text: 'Analytics',
+        align: 'start numeric',
+        sortable: true,
+        value: 'googleAnalytics',
+        width: '200px',
+        display:true,
+      },
+      {
+        text: 'Notes',
+        align: 'start',
+        sortable: false,
+        value: 'notes',
+        zzzwidth: '200px',
+        display:true,
+      }
+    ]
   }),
-  computed:{
-    headers() {
-      return [
-        {
-          text: 'Logo',
-          align: 'start',
-          sortable: true,
-          value: 'hrefLogo',
-          width: '100px'
-        },
-        {
-          text: 'Société',
-          align: 'start',
-          sortable: true,
-          value: 'societe',
-          width: '350px'
-        },
-        {
-          text: 'Contact', //email adresse
-          align: 'start',
-          sortable: true,
-          value: 'email',
-          width: '300px'
-        },
-        {
-          text: 'Date d\'installation',
-          align: 'start numeric',
-          sortable: true,
-          value: 'date',
-          width: '100px'
-        },
-        {
-          text: 'Status',
-          align: 'start numeric',
-          sortable: true,
-          value: 'status',
-          width: '100px'
-        }, {
-          text: 'Payant',
-          align: 'start numeric',
-          sortable: true,
-          value: 'payant',
-          width: '100px'
-        },
-        {
-          text: 'Warning',
-          align: 'start numeric',
-          sortable: true,
-          value: 'warning',
-          width: '200px'
-        },
-        {
-          text: 'Version',
-          align: 'start numeric',
-          sortable: true,
-          value: 'version',
-          width: '100px'
-        },
-        {
-          text: 'Relevés',
-          align: 'start numeric',
-          sortable: true,
-          value: 'countReleves',
-          width: '100px'
-        },
-        {
-          text: 'Dernier relevé',
-          align: 'start numeric',
-          sortable: true,
-          value: 'lastReleve',
-          width: '100px'
-        },
-        {
-          text: 'Membres',
-          align: 'start numeric',
-          sortable: true,
-          value: 'countHumains',
-          width: '100px'
-        },
-        {
-          text: 'Équipes',
-          align: 'start numeric',
-          sortable: true,
-          value: 'countEquipes',
-          width: '100px'
-        },
-        {
-          text: 'Thématiques de risque',
-          align: 'start numeric',
-          sortable: true,
-          value: 'countTDR',
-          width: '100px'
-        },
-        {
-          text: 'Taille',
-          align: 'start numeric',
-          sortable: true,
-          value: 'dirSize',
-          width: '200px'
-        },
-        {
-          text: 'Analytics',
-          align: 'start numeric',
-          sortable: true,
-          value: 'googleAnalytics',
-          width: '200px'
-        },
-        {
-          text: 'Notes',
-          align: 'start',
-          sortable: false,
-          value: 'notes',
-          zzzwidth: '200px'
-        }
-      ]
+  mounted() {
+    //en fonction du local storage quel header masquer ou montrer
+    for(let i=0;i<this.allHeaders.length;i++){
+      this.allHeaders[i].display=this.$utils.ls.getBool( this.allHeaders[i].value,this.allHeaders[i].display);
     }
+  },
+  computed:{
+
+    /**
+     * Les headers à afficher
+     * @return {[]}
+     */
+    headers:{
+      get:function(){
+        return this.allHeaders.filter(h=>h.display===true);
+      },
+      set:function(headers){
+        console.log("set headers",headers);
+        for(let i=0;i<this.allHeaders.length;i++){
+          if(headers.find(h=>h.value===this.allHeaders[i].value)){
+            this.allHeaders[i].display=true;
+            this.$utils.ls.setBool(this.allHeaders[i].value,true)
+          }else{
+            this.allHeaders[i].display=false;
+            this.$utils.ls.setBool(this.allHeaders[i].value,false)
+          }
+        }
+      },
+    },
   },
   watch:{
     dialog(){
