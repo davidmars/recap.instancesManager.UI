@@ -1,6 +1,7 @@
 import isEmail from "validator/lib/isEmail";
 import EE09dateUtils from "@/utils/EE09dateUtils";
 import BrowserUtils from "@/utils/BrowserUtils";
+import EE09localStorage from "@/utils/EE09localStorage";
 const filesize=require('filesize');
 
 export default class Utils{
@@ -8,6 +9,11 @@ export default class Utils{
     constructor() {
         this.date=new EE09dateUtils();
         this.browser=new BrowserUtils();
+        /**
+         *
+         * @type {EE09localStorage}
+         */
+        this.ls=new EE09localStorage("recap.manager.ui");
     }
     winOpen(url){
         window.open(url);
