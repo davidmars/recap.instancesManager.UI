@@ -79,6 +79,7 @@ export default class Api{
         },cb,cbError);
     }
     updateVersion(instance,cb,cbError){
+
         this._call("set/update-version",{
             instance:instance
         },cb,cbError);

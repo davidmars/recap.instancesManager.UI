@@ -123,20 +123,18 @@ export default class Db{
      * @param cbError
      */
     updateVersion(instance,cb=()=>{},cbError=()=>{}){
-        setTimeout(()=>{
-            window.$api.updateVersion(
-                instance,
-                (data)=>{
-                    this._setInstances(data.body.instances);
-                    cb();
-                },
-                ()=>{
-                    this.refresh();
-                    cbError();
-                }
-            )
-        },3000)
-
+        instance._isLoading=true;
+        window.$api.updateVersion(
+            instance,
+            (data)=>{
+                this._setInstances(data.body.instances);
+                cb();
+            },
+            ()=>{
+                this.refresh();
+                cbError();
+            }
+        )
     }
 
     /**

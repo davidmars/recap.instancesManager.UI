@@ -42,6 +42,7 @@ export default class Instance{
          */
         this.comptes=[];
 
+        this._isLoading=false;
     }
 
     /**
@@ -59,6 +60,7 @@ export default class Instance{
      * Met à jour les données depuis l'instance
      */
     loadFromInstance(){
+        this._isLoading=true;
         // https://02.recap.tw/master/server/v/api/public-infos
         this.lastReleve=null;
         this.countReleves=null;
@@ -70,6 +72,7 @@ export default class Instance{
         )
             .then(function (response) {
                 console.log("response",response)
+                me._isLoading=false;
                 if(response.data.success){
                     const json=response.data.json;
                    me.lastReleve=json.lastReleve;
@@ -135,6 +138,7 @@ export default class Instance{
     updateCompte(compteData,cb=()=>{},cbError=()=>{}){
         let me=this;
         compteData.pwd=md5(window.$api.cleanPwd);
+        this._isLoading=true;
         axios.post(
             `${this.server}/v/im.api/update-humain`,
             compteData,
