@@ -91,6 +91,8 @@ export default class Instance{
             })
             .catch(function (error) {
                 console.error(error);
+                window.$manager.errors.push(`Erreur ajax pour ${me.server}/v/im.api/public-infos`)
+                me._isLoading=false;
             })
             .then(function () {
                 // always executed

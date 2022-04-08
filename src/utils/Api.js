@@ -39,7 +39,7 @@ export default class Api{
             me._manageResponse(response,cbSuccess,cbError);
         })
         .catch(function (error) {
-            console.error(error);
+            console.error("api action",error);
             cbError(error);
         })
         .then(function () {

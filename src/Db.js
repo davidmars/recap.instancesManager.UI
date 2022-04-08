@@ -118,7 +118,7 @@ export default class Db{
 
     /**
      * Pour mettre à jour l'instance vers la nouvelle version
-     * @param instance
+     * @param {Instance} instance
      * @param cb
      * @param cbError
      */
@@ -131,7 +131,9 @@ export default class Db{
                 cb();
             },
             ()=>{
-                this.refresh();
+                window.$manager.errors.push(`Erreur ajax pour updateVersion de ${instance.server}`)
+                instance._isLoading=false;
+                //this.refresh();
                 cbError();
             }
         )
@@ -145,4 +147,61 @@ export default class Db{
     _getMaster(){
         return this.instances.find(i=> i.name==="master" );
     }
+
+    /**
+     * Tatal des relevés additionnés
+     * @return {number}
+     */
+    get totalReleves(){
+        let t=0;
+        this.instances.forEach((i)=>{
+            t+=i.countReleves;
+        })
+       return t;
+    }
+    /**
+     * Tatal des relevés additionnés
+     * @return {number}
+     */
+    get totalHumains(){
+        let t=0;
+        this.instances.forEach((i)=>{
+            t+=i.countHumains;
+        })
+       return t;
+    }
+    /**
+     * Tatal des équipes additionnées
+     * @return {number}
+     */
+    get totalEquipes(){
+        let t=0;
+        this.instances.forEach((i)=>{
+            t+=i.countEquipes;
+        })
+       return t;
+    }
+    /**
+     * Tatal des équipes additionnées
+     * @return {number}
+     */
+    get totalTDR(){
+        let t=0;
+        this.instances.forEach((i)=>{
+            t+=i.countTDR;
+        })
+       return t;
+    }
+    /**
+     * Tatal des poids additionnées
+     * @return {number}
+     */
+    get totalDirSize(){
+        let t=0;
+        this.instances.forEach((i)=>{
+            t+=i.dirSize;
+        })
+       return t;
+    }
+
 }

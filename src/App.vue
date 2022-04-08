@@ -3,9 +3,10 @@
 
     <v-main>
 
+      <!-- login -->
       <login-dialog/>
 
-      <!-- erreurs-->
+      <!-- erreurs -->
       <error-dialog/>
 
       <!-- popin detail-->
@@ -53,12 +54,11 @@
 
 
 
-
+            <!-- TOP ----------------------------------- -->
             <template v-slot:top>
               <div class="d-flex align-center pa-5">
                 Instances
                 <span class="ml-2 grey--text">({{$db.instances.length}})</span>
-
                 <!-- refresh-->
                 <v-btn
                     fab class="mx-5" small
@@ -66,11 +66,7 @@
                     @click="$db.refresh();">
                   <v-icon>mdi-sync</v-icon>
                 </v-btn>
-
                 <v-spacer/>
-
-
-
                 <!-- search-->
                 <v-text-field
                     dense
@@ -79,15 +75,63 @@
                     append-icon="mdi-magnify" clearable
                     label="Rechercher"
                 ></v-text-field>
-
                 <!--nouvelle instance-->
                 <v-btn class="ml-5" color="success" @click="ajouterInstance()">
                   <v-icon left>mdi-plus-circle</v-icon>
                   Nouvelle instance
                 </v-btn>
-
               </div>
             </template>
+
+
+            <!-- headers ----------------------------------- -->
+
+            <!--header countReleves-->
+            <template v-slot:header.countReleves="{ header }">
+              <div>
+                {{header.text}}
+                <br>
+                <code>{{$db.totalReleves}}</code>
+              </div>
+            </template>
+
+            <!--header countHumains-->
+            <template v-slot:header.countHumains="{ header }">
+              <div>
+                {{header.text}}
+                <br>
+                <code>{{$db.totalHumains}}</code>
+              </div>
+            </template>
+
+            <!--header countEquipes-->
+            <template v-slot:header.countEquipes="{ header }">
+              <div>
+                {{header.text}}
+                <br>
+                <code>{{$db.totalEquipes}}</code>
+              </div>
+            </template>
+
+            <!--header countTDR-->
+            <template v-slot:header.countTDR="{ header }">
+              <div>
+                {{header.text}}
+                <br>
+                <code>{{$db.totalTDR}}</code>
+              </div>
+            </template>
+
+            <!--header dirSize-->
+            <template v-slot:header.dirSize="{ header }">
+              <div>
+                {{header.text}}
+                <br>
+                <code>{{$utils.humanSize($db.totalDirSize)}}</code>
+              </div>
+            </template>
+
+            <!-- colonnes ---------------------------------- -->
 
             <!--logo-->
             <template v-slot:item.hrefLogo="{ item }">
