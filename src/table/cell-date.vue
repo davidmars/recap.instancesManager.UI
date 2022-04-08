@@ -36,7 +36,6 @@ export default {
       if(d===null){
         return  "..."
       }
-      console.log(this.date,d,new Date())
       let str=window.$utils.date.formatDistance(d,new Date(),{locale:"fr"});
       str=str.replace("environ ","");
       return str;
