@@ -102,6 +102,10 @@ export default class Api{
             }
         );
     }
+    logout(){
+        this.resetCleanPwd();
+        document.location.reload();
+    }
     getInstances(cb,cbError){
         this._call("get/instances",{
         },cb,cbError);

@@ -8,7 +8,7 @@ export default class EE09localStorage{
      * @param prop
      */
     remove(prop){
-        localStorage.removeItem(prop);
+        localStorage.removeItem(`${this.prefix}_${prop}`);
     }
     /**
      * Renvoie un booleen

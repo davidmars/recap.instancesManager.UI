@@ -33,6 +33,14 @@ export default class Db{
     }
 
     /**
+     * Les apis connectées
+     * @return {Api[]}
+     */
+    get apisConnected(){
+        return this.apis.filter(api=>api.loggedIn===true);
+    }
+
+    /**
      * Toutes les APIs sont-elles logguées?
      * @return {boolean}
      */

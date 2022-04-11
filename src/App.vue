@@ -52,13 +52,35 @@
               :footer-props="{
                 'items-per-page-options': [50,100,200,500]
               }"
-              dense
           >
             <!-- TOP ----------------------------------- -->
             <template v-slot:top>
-              <div class="d-flex align-center pa-5">
-                Instances
-                <span class="ml-2 grey--text">({{$db.instances.length}})</span>
+
+
+
+              <div class="d-flex align-center pa-5 pl-0">
+
+                <v-list dense shaped max-width="250" >
+                  <v-list-item link @click="$manager._displayLogin=true;">
+                    <v-list-item-content>
+                      <v-list-item-title class="text-h6">
+                        Serveurs
+                        <span class="ml-2 grey--text">({{$db.apisConnected.length}}/{{$db.apis.length}})</span>
+                      </v-list-item-title>
+                      <v-list-item-subtitle>
+                        Instances
+                        <span class="ml-2 grey--text">({{$db.instances.length}})</span>
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+
+                    <v-list-item-action>
+                      <v-icon>mdi-menu-down</v-icon>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
+
+
+
                 <!-- refresh-->
                 <v-btn
                     fab class="mx-5" small

@@ -5,7 +5,9 @@
       max-width="400"
   >      <v-card>
     <v-card-title class="text-h6">
-      Identification {{$manager.displayLogin}}
+      Identification
+      <v-spacer/>
+      <v-icon @click="$manager._displayLogin=false;">mdi-close</v-icon>
     </v-card-title>
     <v-divider/>
     <v-card-text>
@@ -21,9 +23,17 @@
               :error-messages="api.loggedIn?null:'Non connecté'"
               type="password">
             <template v-slot:append-outer>
-              <v-btn rounded color="primary" type="submit">
-                <v-icon>mdi-keyboard-return</v-icon>
-              </v-btn>
+              <template v-if="api.loggedIn">
+                <v-btn rounded color="error" fab small @click="api.logout()">
+                  <v-icon>mdi-logout</v-icon>
+                </v-btn>
+              </template>
+              <template v-else>
+                <v-btn rounded color="primary" type="submit" fab small>
+                  <v-icon>mdi-keyboard-return</v-icon>
+                </v-btn>
+              </template>
+
             </template>
           </v-text-field>
     </v-form>

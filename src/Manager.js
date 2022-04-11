@@ -17,6 +17,8 @@ export default class Manager{
          */
        this.errors=[];
 
+       this._displayLogin=false;
+
     }
 
     /**
@@ -24,7 +26,7 @@ export default class Manager{
      * @return {boolean}
      */
     get displayLogin(){
-        return window.$db.allLoggedIn===false;
+        return window.$db.oneLoggedIn===false || this._displayLogin;
     }
 
     /**
