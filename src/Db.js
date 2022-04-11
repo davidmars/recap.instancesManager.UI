@@ -195,7 +195,9 @@ export default class Db{
     get totalReleves(){
         let t=0;
         this.instances.forEach((i)=>{
-            t+=i.countReleves;
+            if(!isNaN(i.countReleves)) {
+                t += i.countReleves;
+            }
         })
        return t;
     }
@@ -206,7 +208,9 @@ export default class Db{
     get totalHumains(){
         let t=0;
         this.instances.forEach((i)=>{
-            t+=i.countHumains;
+            if(!isNaN(i.countHumains)) {
+                t += i.countHumains;
+            }
         })
        return t;
     }
@@ -217,7 +221,9 @@ export default class Db{
     get totalEquipes(){
         let t=0;
         this.instances.forEach((i)=>{
-            t+=i.countEquipes;
+            if(!isNaN(i.countEquipes)){
+                t+=i.countEquipes;
+            }
         })
        return t;
     }
@@ -228,7 +234,9 @@ export default class Db{
     get totalTDR(){
         let t=0;
         this.instances.forEach((i)=>{
-            t+=i.countTDR;
+            if(!isNaN(i.countTDR)) {
+                t += i.countTDR;
+            }
         })
        return t;
     }
@@ -239,7 +247,9 @@ export default class Db{
     get totalDirSize(){
         let t=0;
         this.instances.forEach((i)=>{
-            t+=i.dirSize;
+            if(!isNaN(i.dirSize)) {
+                t += i.dirSize;
+            }
         })
        return t;
     }
