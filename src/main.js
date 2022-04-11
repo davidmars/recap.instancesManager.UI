@@ -26,8 +26,8 @@ Vue.prototype.$manager = Vue.observable(window.$manager);
  */
 window.$db=new Db(
     [
-        new Api("https://recap.tw/im.api/api"),
-        new Api("https://02.recap.tw/im.api/api"),
+        new Api("https://recap.tw"),
+        new Api("https://02.recap.tw"),
     ]
 );
 Vue.prototype.$db = Vue.observable(window.$db);

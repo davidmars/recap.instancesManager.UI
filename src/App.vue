@@ -11,9 +11,11 @@
 
       <!-- popin detail-->
       <v-dialog
+          overlay-color="#555"
+          overlay-opacity="0.9"
           scrollable max-width="1000px"
           v-model="$manager.dialogOpen">
-        <v-card dark v-if="$manager.selectedInstance">
+        <v-card dark v-if="$manager.selectedInstance" >
           <v-card-title>
             <div class="d-flex">
               {{ $manager.selectedInstance.name }}
@@ -28,10 +30,11 @@
             <v-icon @click="$manager.dialogOpen=false;">mdi-close</v-icon>
           </v-card-title>
           <v-divider></v-divider>
-          <v-card-text class="my-5">
-            <instance-form :instance="$manager.selectedInstance"/>
+          <v-card-text class="py-5">
+            <instance-form
+                :instance="$manager.selectedInstance"/>
           </v-card-text>
-
+          <loading-layer v-if="$manager.selectedInstance._isLoading"/>
         </v-card>
       </v-dialog>
 
@@ -294,9 +297,10 @@ import InstanceForm from "@/instance-form";
 import ErrorDialog from "@/error-dialog";
 import LoginDialog from "@/login-dialog";
 import CellDate from "@/table/cell-date";
+import LoadingLayer from "@/loading-layer";
 export default {
   name: 'App',
-  components: {CellDate, LoginDialog, ErrorDialog, InstanceForm},
+  components: {LoadingLayer, CellDate, LoginDialog, ErrorDialog, InstanceForm},
   data: () => ({
     search:'',
     dialog:false,
@@ -337,6 +341,14 @@ export default {
         align: 'start numeric',
         sortable: true,
         value: 'date',
+        width: '100px',
+        display:true,
+      },
+      {
+        text: 'Serveur',
+        align: 'start numeric',
+        sortable: true,
+        value: 'serverName',
         width: '100px',
         display:true,
       },
@@ -444,7 +456,6 @@ export default {
     }
   },
   computed:{
-
     /**
      * Les headers à afficher
      * @return {[]}

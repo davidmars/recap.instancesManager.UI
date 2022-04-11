@@ -76,29 +76,36 @@ export default class Db{
 
 
     /**
-     * Met à jour toutes les données
+     * Met a jour les instances sur tous les serveurs
      */
-    refresh(cb=()=>{}){
+    refresh(){
         console.log("refreshh")
         this.isLoading=true;
         this.apis.forEach((api)=>{
-            api.getInstances((data)=>{
-                this.isLoading=false;
-                //this.instances=data.body.instances;
-                this._setInstances(data.body.instances);
-                cb();
-            })
+           this.refreshServer(api);
         })
-
     }
+
+    /**
+     * Met a jour les instances sur un serveur donné
+     * @param api
+     */
+    refreshServer(api){
+        api.getInstances((data)=>{
+            this.isLoading=false;
+            //this.instances=data.body.instances;
+            this._setInstances(data.body.instances);
+        })
+    }
+
+
     /**
      * Pour créer une instance
-     * @param instance
+     * @param {Instance} instance
      * @param cb
      * @param cbError
      */
     create(instance,cb=()=>{},cbError=()=>{}){
-
         let superviseur={
             email:instance.email,
             userNom:instance.userNom,
@@ -106,7 +113,7 @@ export default class Db{
             userPwd:instance.userPwd,
         }
 
-        window.$api.create(
+        instance.imApi.create(
             instance,
             (data)=>{
                 this._setInstances(data.body.instances);
@@ -117,11 +124,11 @@ export default class Db{
                     ()=>{
                         this.refresh();
                         cb();
-                    },()=>{
-                        cbError();
                     },
-                    )
-
+                    ()=>{
+                        cbError();
+                    }
+                );
             },
             ()=>{
                 this.refresh();
@@ -131,12 +138,12 @@ export default class Db{
     }
     /**
      * Pour enregistrer des modifs sur une instance
-     * @param instance
+     * @param {Instance} instance
      * @param cb
      * @param cbError
      */
     store(instance,cb=()=>{},cbError=()=>{}){
-        window.$api.store(
+        instance.imApi.store(
             instance,
             (data)=>{
                 this._setInstances(data.body.instances);
@@ -157,7 +164,7 @@ export default class Db{
      */
     updateVersion(instance,cb=()=>{},cbError=()=>{}){
         instance._isLoading=true;
-        window.$api.updateVersion(
+        instance.imApi.updateVersion(
             instance,
             (data)=>{
                 this._setInstances(data.body.instances);
@@ -175,14 +182,14 @@ export default class Db{
     /**
      * Renvoie l'instance master
      * @private
-     * @return {T}
+     * @return {Instance}
      */
     _getMaster(){
         return this.instances.find(i=> i.name==="master" );
     }
 
     /**
-     * Tatal des relevés additionnés
+     * Total des relevés additionnés
      * @return {number}
      */
     get totalReleves(){

@@ -3,26 +3,40 @@ const md5 = require('md5');
 export default class Api{
     /**
      *
-     * @param {String} apiUrl Url point d'entrée de l'API serveur
+     * @param {String} serverUrl Url du serveur
      */
-    constructor(apiUrl) {
-        this.apiUrl=apiUrl;
+    constructor(serverUrl) {
+        this.serverUrl=serverUrl;
+        this.apiUrl=serverUrl+"/im.api/api";
         this.cleanPwd=window.$utils.ls.getString(`${this.apiUrl}-pwd`);
         this.loggedIn=false;
+        /**
+         * Fonction à appeler après un login
+         * @type {null}
+         */
+        this.onLoginCB=null;
         if(this.cleanPwd){
             this.login();
         }
     }
 
     /**
-     * Sauvegarde le pwd en LS
+     * Le mot de passe hashé
+     * @return {string}
+     */
+    get hashedPwd(){
+        return md5(this.cleanPwd);
+    }
+
+    /**
+     * Sauvegarde le pwd en local storage
      * @private
      */
     saveCleanPwd(){
         window.$utils.ls.setString(`${this.apiUrl}-pwd`,this.cleanPwd);
     }
     /**
-     * Reset le pwd en LS
+     * Reset le pwd en local storage
      * @private
      */
     resetCleanPwd(){
@@ -72,6 +86,7 @@ export default class Api{
                 this.loggedIn=true;
                 //on save le pwd en LS
                 this.saveCleanPwd();
+                window.$db.refreshServer(this,)
             },
             ()=>{
                 this.resetCleanPwd();

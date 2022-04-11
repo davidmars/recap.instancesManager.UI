@@ -1,6 +1,5 @@
 import {default as axios} from "axios";
 import InstanceCompte from "@/InstanceCompte";
-const md5 = require('md5');
 
 export default class Instance{
     constructor() {
@@ -46,6 +45,30 @@ export default class Instance{
     }
 
     /**
+     * Le nom du serveur
+     * @return {String|string}
+     */
+    get serverName(){
+        if(this.imApi){
+            return this.imApi.serverUrl.replace("https://","");
+        }
+        return "???";
+    }
+    /**
+     * L'api Manager qui correspond au serveur de cette instance
+     * @return {Api|null}
+     */
+    get imApi(){
+        for(let api of window.$db.apis){
+         if(this.server.indexOf(api.serverUrl)===0){
+             return api;
+         }
+        }
+        return null;
+    }
+
+
+    /**
      *
      * @param json
      * @return {Instance}
@@ -59,6 +82,10 @@ export default class Instance{
      * Met à jour les données depuis l'instance
      */
     loadFromInstance(){
+        if(!this.imApi){
+            console.warn("no imApi",this.server);
+            return;
+        }
         this._isLoading=true;
         // https://02.recap.tw/master/server/v/api/public-infos
         this.lastReleve=null;
@@ -66,7 +93,7 @@ export default class Instance{
         let me=this;
         axios.post(`${this.server}/v/im.api/public-infos`,
             {
-                pwd:md5(window.$api.cleanPwd)
+                pwd:this.imApi.hashedPwd
             },//{headers:h}
         )
             .then(function (response) {
@@ -104,7 +131,7 @@ export default class Instance{
      * @param cbError
      */
     createSuperviseur(superviseurData,cb,cbError){
-        superviseurData.pwd=md5(window.$api.cleanPwd);
+        superviseurData.pwd=this.imApi.hashedPwd;
         axios.post(
             `${this.server}/v/im.api/create-superviseur`,
             superviseurData,
@@ -136,7 +163,7 @@ export default class Instance{
      */
     updateCompte(compteData,cb=()=>{},cbError=()=>{}){
         let me=this;
-        compteData.pwd=md5(window.$api.cleanPwd);
+        compteData.pwd=this.imApi.hashedPwd;
         this._isLoading=true;
         axios.post(
             `${this.server}/v/im.api/update-humain`,
@@ -183,7 +210,7 @@ export default class Instance{
         let formData = new FormData();
         formData.append("file", file);
         formData.append("fileName", file.name);
-        formData.append("pwd",md5(window.$api.cleanPwd))
+        formData.append("pwd",this.imApi.hashedPwd)
 
         axios.post(`${this.server}/v/im.api/update-logo`, formData, {
             headers: {

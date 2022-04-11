@@ -1,19 +1,5 @@
 <template>
-<div style="position: relative;">
-  <div
-      v-if="instance._isLoading"
-      class="fill-height d-flex justify-center align-center "
-       style="
-        position:absolute;
-        width: 100%;
-        background-color: rgba(0,0,0,0.5);
-        z-index: 1;
-      ">
-    <v-progress-circular
-        indeterminate
-        size="100"
-    />
-  </div>
+<div>
   <v-row>
     <v-col cols="4">
       <v-avatar tile color="#EEEEEE" size="300">
@@ -22,29 +8,25 @@
             <v-icon >mdi-cloud-upload</v-icon>
           </v-btn>
           <!-- HTML5 Input Form Elements -->
-          <input
-              style="
-              left: 0;
-              position: absolute;
-              top:0px;
-              width: 100%;
-              height: 100%;
-              opacity: 0;
-              "
-              type="file"
+          <input class="fileupload-transparent"
+              type="file" accept="image/*"
               name="fileupload"
               @change="upload"
-              accept="image/*"
           />
         </v-img>
 
       </v-avatar>
 
-
-
-
     </v-col>
     <v-col cols="8">
+      <v-select
+          label="Serveur"
+          :items="$db.apis"
+          item-text="serverUrl"
+          return-object
+          v-model="instance.imApi"
+          filled
+      ></v-select>
       <v-text-field
           autocomplete="new-password"
           label="Société"
@@ -86,7 +68,6 @@
             filled
         />
       </template>
-
 
       <v-textarea
           autocomplete="new-password"
@@ -306,6 +287,13 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="less">
+.fileupload-transparent{
+  left: 0;
+  position: absolute;
+  top:0px;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
 </style>
