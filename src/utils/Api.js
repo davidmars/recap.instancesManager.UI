@@ -21,6 +21,14 @@ export default class Api{
     }
 
     /**
+     * Nom du server
+     * @return {*}
+     */
+    get name(){
+        return this.serverUrl.replace("https://","");
+    }
+
+    /**
      * Le mot de passe hashé
      * @return {string}
      */

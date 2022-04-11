@@ -20,9 +20,10 @@
     </v-col>
     <v-col cols="8">
       <v-select
+          v-if="!existe"
           label="Serveur"
           :items="$db.apis"
-          item-text="serverUrl"
+          item-text="name"
           return-object
           v-model="instance.imApi"
           filled
@@ -201,16 +202,17 @@
           color="success">Enregistrer</v-btn>
       <v-btn
           v-else
-          :disabled="!modified"
+          :disabled="!modified || !instance.imApi"
           :loading="saving"
-          @click="saving=true;$db.create(instance,
-          ()=>{
-            modified=false;
-            saving=false;
-          },
-          ()=>{
-            saving=false;
-          }
+          @click="saving=true;$db.create(
+              instance,
+              ()=>{
+                modified=false;
+                saving=false;
+              },
+              ()=>{
+                saving=false;
+              }
           )"
           color="success">Créer</v-btn>
     </v-col>

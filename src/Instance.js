@@ -50,7 +50,7 @@ export default class Instance{
      */
     get serverName(){
         if(this.imApi){
-            return this.imApi.serverUrl.replace("https://","");
+            return this.imApi.name;
         }
         return "???";
     }
