@@ -7,7 +7,26 @@ export default class Api{
      */
     constructor(apiUrl) {
         this.apiUrl=apiUrl;
-        this.cleanPwd=window.$utils.ls.getString("pwd");
+        this.cleanPwd=window.$utils.ls.getString(`${this.apiUrl}-pwd`);
+        this.loggedIn=false;
+        if(this.cleanPwd){
+            this.login();
+        }
+    }
+
+    /**
+     * Sauvegarde le pwd en LS
+     * @private
+     */
+    saveCleanPwd(){
+        window.$utils.ls.setString(`${this.apiUrl}-pwd`,this.cleanPwd);
+    }
+    /**
+     * Reset le pwd en LS
+     * @private
+     */
+    resetCleanPwd(){
+        window.$utils.ls.remove(`${this.apiUrl}-pwd`);
     }
 
     _manageResponse(response,cbSuccess,cbError){
@@ -49,14 +68,14 @@ export default class Api{
     login(cb,cbError){
         this._call("get/login",{},
             ()=>{
-            window.$manager.loggedIn=true;
-            window.$db.refresh()
-            window.$utils.ls.setString("pwd",this.cleanPwd);
+                //ok on est logué
+                this.loggedIn=true;
+                //on save le pwd en LS
+                this.saveCleanPwd();
             },
             ()=>{
-                window.$utils.ls.remove("pwd");
-
-            cbError();
+                this.resetCleanPwd();
+                cbError();
             }
         );
     }

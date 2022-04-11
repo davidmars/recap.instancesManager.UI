@@ -37,7 +37,7 @@
 
       <v-sheet dark height="100vh" >
           <v-data-table
-              v-if="$manager.loggedIn"
+              v-if="!$manager.displayLogin"
               class="the-table"
               @dblclick:row="clickRow"
               height="calc( 100vh - 80px - 75px)"

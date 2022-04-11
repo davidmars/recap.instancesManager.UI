@@ -17,12 +17,14 @@ export default class Manager{
          */
        this.errors=[];
 
-        this.loggedIn=false;
-
     }
 
+    /**
+     * Faut il afficher le login ou pas ?
+     * @return {boolean}
+     */
     get displayLogin(){
-        return !this.loggedIn;
+        return window.$db.allLoggedIn===false;
     }
 
     /**

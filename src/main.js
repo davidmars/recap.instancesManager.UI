@@ -20,21 +20,16 @@ Vue.prototype.$utils = Vue.observable(window.$utils);
 window.$manager=new Manager();
 Vue.prototype.$manager = Vue.observable(window.$manager);
 
-
-let apiUrl="https://02.recap.tw/im.api/api";
-apiUrl="https://recap.tw/im.api/api"
-/**
- *
- * @type {Api}
- */
-window.$api=new Api(apiUrl);
-Vue.prototype.$api = Vue.observable(window.$api);
-
 /**
  *
  * @type {Db}
  */
-window.$db=new Db();
+window.$db=new Db(
+    [
+        new Api("https://recap.tw/im.api/api"),
+        new Api("https://02.recap.tw/im.api/api"),
+    ]
+);
 Vue.prototype.$db = Vue.observable(window.$db);
 
 

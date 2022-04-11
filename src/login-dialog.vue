@@ -2,53 +2,40 @@
   <v-dialog
       v-model="$manager.displayLogin"
       persistent
-      max-width="290"
-  >
-    <v-form @submit.prevent="()=>{$api.login()}">
-      <v-card>
-        <v-card-title class="text-h6">
-          Identification
-        </v-card-title>
-        <v-card-text>
+      max-width="400"
+  >      <v-card>
+    <v-card-title class="text-h6">
+      Identification {{$manager.displayLogin}}
+    </v-card-title>
+    <v-divider/>
+    <v-card-text>
+    <v-form
+        class="pt-5"
+        v-for="api in $db.apis" :key="api.apiUrl"
+        @submit.prevent="()=>{api.login()}">
           <v-text-field
-              v-model="$api.cleanPwd"
-              label="mot de passe"
-              append-icon=""
-              hide-details
+              v-model="api.cleanPwd"
+              :label="api.apiUrl"
               placeholder="******"
-              type="password"/>
-        </v-card-text>
-        <v-divider/>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-              color="primary"
-              type="submit"
-              text
-          >
-            Connexion
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+              :success-messages="api.loggedIn?'Connecté':null"
+              :error-messages="api.loggedIn?null:'Non connecté'"
+              type="password">
+            <template v-slot:append-outer>
+              <v-btn rounded color="primary" type="submit">
+                <v-icon>mdi-keyboard-return</v-icon>
+              </v-btn>
+            </template>
+          </v-text-field>
     </v-form>
+    </v-card-text>
+  </v-card>
   </v-dialog>
 
 </template>
 
 <script>
 export default {
-  name: "login-dialog",
-  mounted(){
-    if(window.$api.cleanPwd){
-      window.$api.login(()=>{},()=>{
-        setTimeout(()=>{
-          window.$api.cleanPwd="";
-          this.$manager.errors=[]
-        },100)
-
-      });
-    }
-  }
+  name: "login-dialog"
 }
 </script>
 

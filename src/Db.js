@@ -1,12 +1,25 @@
 import Instance from "@/Instance";
 
 export default class Db{
-    constructor() {
+    /**
+     *
+     * @param {Api[]}apis
+     */
+    constructor(apis) {
+        /**
+         * Les apis qui correspondent aux différents serveurs
+         * @type {Api[]}
+         */
+        this.apis=apis;
         /**
          * La liste des instances
          * @type {Instance[]}
          */
         this.instances=[];
+        /**
+         * Est on entrain de charger des données
+         * @type {boolean}
+         */
         this.isLoading=false;
         //this.refresh();
 
@@ -16,6 +29,22 @@ export default class Db{
          */
         this.masterVersion=null;
 
+
+    }
+
+    /**
+     * Toutes les APIs sont-elles logguées?
+     * @return {boolean}
+     */
+    get allLoggedIn(){
+        return this.apis.find(api=>api.loggedIn===false) === undefined;
+    }
+    /**
+     * Au moins une API est-elle connectée?
+     * @return {boolean}
+     */
+    get oneLoggedIn(){
+        return this.apis.find(api=>api.loggedIn===true) !== undefined;
     }
 
     /**
@@ -35,8 +64,6 @@ export default class Db{
         this.masterVersion=this._getMaster().version;
     }
 
-
-
     /**
      * Renvoie une instance à partir de son href
      * @private
@@ -46,6 +73,7 @@ export default class Db{
     _getInstance(href){
         return this.instances.find(i=>i.href===href);
     }
+
 
     /**
      * Met à jour toutes les données
