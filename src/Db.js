@@ -79,13 +79,17 @@ export default class Db{
      * Met à jour toutes les données
      */
     refresh(cb=()=>{}){
+        console.log("refreshh")
         this.isLoading=true;
-        window.$api.getInstances((data)=>{
-            this.isLoading=false;
-            //this.instances=data.body.instances;
-            this._setInstances(data.body.instances);
-            cb();
+        this.apis.forEach((api)=>{
+            api.getInstances((data)=>{
+                this.isLoading=false;
+                //this.instances=data.body.instances;
+                this._setInstances(data.body.instances);
+                cb();
+            })
         })
+
     }
     /**
      * Pour créer une instance
