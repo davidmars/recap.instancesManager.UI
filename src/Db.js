@@ -89,7 +89,7 @@ export default class Db{
     refresh(){
         console.log("refreshh")
         this.isLoading=true;
-        this.apis.forEach((api)=>{
+        this.apisConnected.forEach((api)=>{
            this.refreshServer(api);
         })
     }
