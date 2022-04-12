@@ -1,6 +1,7 @@
 const axios = require('axios').default;
 const md5 = require('md5');
 export default class Api{
+
     /**
      *
      * @param {String} serverUrl Url du serveur
@@ -9,7 +10,8 @@ export default class Api{
         this.serverUrl=serverUrl;
         this.apiUrl=serverUrl+"/im.api/api";
         this.cleanPwd=window.$utils.ls.getString(`${this.apiUrl}-pwd`);
-        this.loggedIn=false;
+        this._loggedIn=false;
+        this.vueKey=0;
         /**
          * Fonction à appeler après un login
          * @type {null}
@@ -27,6 +29,36 @@ export default class Api{
     get name(){
         return this.serverUrl.replace("https://","");
     }
+
+    /**
+     *
+     * @return {Instance[]}
+     */
+    get instances(){
+        return window.$db.instances.filter(inst=>inst.imApi===this);
+    }
+    /**
+     * Total des poids additionnées pour ce serveur
+     * @return {number}
+     */
+    get totalDirSize(){
+        let t=0;
+        this.instances.forEach((i)=>{
+            if(!isNaN(i.dirSize)) {
+                t += i.dirSize;
+            }
+        })
+        return t;
+    }
+
+    /**
+     * Le nombre d'instances
+     * @return {*}
+     */
+    get totalInstances(){
+        return this.instances.length;
+    }
+
 
     /**
      * Le mot de passe hashé
@@ -91,7 +123,7 @@ export default class Api{
         this._call("get/login",{},
             ()=>{
                 //ok on est logué
-                this.loggedIn=true;
+                this._loggedIn=true;
                 //on save le pwd en LS
                 this.saveCleanPwd();
                 window.$db.refreshServer(this,)
@@ -105,6 +137,29 @@ export default class Api{
     logout(){
         this.resetCleanPwd();
         document.location.reload();
+    }
+    get loggedIn() {
+        return this._loggedIn;
+    }
+    set loggedIn(value) {
+        if(!value){
+            this.vueKey++;
+            this.logout();
+        }else{
+            this.login(
+                ()=>{
+                    this.vueKey++;
+                    this._loggedIn=true;
+                },
+                ()=>{
+                    this.vueKey++;
+                    this._loggedIn=false;
+                }
+            )
+        }
+        this.vueKey++;
+
+        //this._loggedIn = value;
     }
     getInstances(cb,cbError){
         this._call("get/instances",{

@@ -43,7 +43,7 @@
               v-if="!$manager.displayLogin"
               class="the-table"
               @dblclick:row="clickRow"
-              height="calc( 100vh - 80px - 75px)"
+              height="calc( 100vh - 80px - 85px)"
               fixed-header
               :headers="headers"
               :items="$db.instances"

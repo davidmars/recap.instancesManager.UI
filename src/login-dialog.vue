@@ -5,9 +5,12 @@
       max-width="400"
   >      <v-card>
     <v-card-title class="text-h6">
-      Identification
+      Connexion
       <v-spacer/>
-      <v-icon @click="$manager._displayLogin=false;">mdi-close</v-icon>
+      <!-- on peut virer la fenêtre si au moin un serveur est logué-->
+      <v-icon
+          v-if="$db.oneLoggedIn"
+          @click="$manager._displayLogin=false;">mdi-close</v-icon>
     </v-card-title>
     <v-divider/>
     <v-card-text>
@@ -19,21 +22,12 @@
               v-model="api.cleanPwd"
               :label="api.apiUrl"
               placeholder="******"
-              :success-messages="api.loggedIn?'Connecté':null"
+              persistent-hint
+              :hint="api.loggedIn?`Connecté: ${api.totalInstances} instances / ${$utils.humanSize(api.totalDirSize)}`:null"
               :error-messages="api.loggedIn?null:'Non connecté'"
               type="password">
             <template v-slot:append-outer>
-              <template v-if="api.loggedIn">
-                <v-btn rounded color="error" fab small @click="api.logout()">
-                  <v-icon>mdi-logout</v-icon>
-                </v-btn>
-              </template>
-              <template v-else>
-                <v-btn rounded color="primary" type="submit" fab small>
-                  <v-icon>mdi-keyboard-return</v-icon>
-                </v-btn>
-              </template>
-
+              <v-switch color="success" v-model="api.loggedIn" :key="api.vueKey"/>
             </template>
           </v-text-field>
     </v-form>
@@ -45,7 +39,16 @@
 
 <script>
 export default {
-  name: "login-dialog"
+  name: "login-dialog",
+  methods:{
+    /**
+     *
+     * @param {Api} api
+     */
+    change(a,b){
+      console.log(a,b)
+    }
+  }
 }
 </script>
 
