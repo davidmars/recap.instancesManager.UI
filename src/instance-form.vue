@@ -14,7 +14,6 @@
               @change="upload"
           />
         </v-img>
-
       </v-avatar>
 
     </v-col>
@@ -226,7 +225,7 @@
           {'value':'name',text:'Compte'},
           {'value':'email',text:'Email'},
           {'value':'issuperviseur',text:'Superviseur'},
-          {'value':'etat',text:'État','width':0},
+          {'value':'etat',text:'État','width':200},
           ]"
       hide-default-footer
   >
@@ -252,6 +251,20 @@
       />
     </template>
   </v-data-table>
+
+
+  <v-data-table
+      v-if="instance.admins"
+      class="my-5"
+      :items="instance.admins"
+      :headers="[
+          {'value':'email',text:'Administrateur'},
+          ]"
+      hide-default-footer
+  >
+  </v-data-table>
+
+  <pre>{{instance}}</pre>
 
 </div>
 </template>

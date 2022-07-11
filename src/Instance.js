@@ -1,5 +1,6 @@
 import {default as axios} from "axios";
 import InstanceCompte from "@/InstanceCompte";
+import InstanceAdmin from "@/InstanceAdmin";
 
 export default class Instance{
     constructor() {
@@ -106,11 +107,17 @@ export default class Instance{
                    me.countEquipes=json.countEquipes;
                    me.countTDR=json.countTDR;
                    me.comptes=[];
+                   me.admins=[];
                    if(json.comptes){
                        json.comptes.forEach((cpte)=>{
                            me.comptes.push(new InstanceCompte().load(cpte))
                        });
                    }
+                    if(json.admins){
+                        json.admins.forEach((admin)=>{
+                            me.admins.push(new InstanceAdmin().load(admin))
+                        });
+                    }
                 }
             })
             .catch(function (error) {
