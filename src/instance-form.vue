@@ -264,7 +264,7 @@
   >
   </v-data-table>
 
-  <pre>{{instance}}</pre>
+  <!--pre>{{instance}}</pre-->
 
 </div>
 </template>
