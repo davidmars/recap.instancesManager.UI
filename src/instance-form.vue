@@ -221,6 +221,7 @@
       v-if="instance.comptes"
       class="my-5"
       :items="instance.comptes"
+      :items-per-page="-1"
       :headers="[
           {'value':'name',text:'Compte'},
           {'value':'email',text:'Email'},
